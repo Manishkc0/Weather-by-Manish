@@ -68,7 +68,7 @@ searchButton.addEventListener("click", () => {
 });
 document.getElementById('cityInput').addEventListener('keydown', function(event) {
   if (event.key === 'Enter') {
-    event.preventDefault(); 
+    event.preventDefault();
     document.getElementById('searchButton').click();
   }
 });
@@ -76,4 +76,5 @@ document.getElementById('cityInput').addEventListener('keydown', function(event)
 document.getElementById('searchButton').addEventListener('click', function() {
   const cityName = document.getElementById('cityInput').value;
   console.log('Searching for:', cityName);
+  // Add your logic to fetch weather data here
 });
