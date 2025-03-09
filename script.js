@@ -9,14 +9,16 @@ const humidityElement = document.querySelector(".humidity span");
 const windSpeedElement = document.querySelector(".wind span");
 const imageElement = document.querySelector(".update-img img");
 const dateElement = document.querySelector(".date");
-const timeElement = document.querySelector(".time"); 
+const timeElement = document.querySelector(".time");
 
+// Function to format the current date
 function getCurrentDate() {
   const now = new Date();
   const options = { weekday: 'short', day: 'numeric', month: 'short' };
   return now.toLocaleDateString('en-US', options);
 }
 
+// Function to update the real-time clock
 function updateClock() {
   const now = new Date();
   const hours = now.getHours().toString().padStart(2, '0');
@@ -25,10 +27,17 @@ function updateClock() {
   timeElement.textContent = `${hours}:${minutes}:${seconds}`;
 }
 
+// Start the real-time clock
 setInterval(updateClock, 1000);
 
-searchButton.addEventListener("click", () => {
-  const city = cityInput.value;
+// Function to fetch weather data
+function fetchWeatherData() {
+  const city = cityInput.value.trim();
+
+  if (!city) {
+    alert("Please enter a city name.");
+    return;
+  }
 
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
@@ -59,22 +68,20 @@ searchButton.addEventListener("click", () => {
           imageElement.src = 'image/weather/atmosphere.svg';
       }
 
+      // Update the date to the current date
       dateElement.textContent = getCurrentDate();
     })
     .catch(error => {
       console.error("Error fetching weather data:", error);
       alert("City not found. Please try again.");
     });
-});
-document.getElementById('cityInput').addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    document.getElementById('searchButton').click();
-  }
-});
+}
 
-document.getElementById('searchButton').addEventListener('click', function() {
-  const cityName = document.getElementById('cityInput').value;
-  console.log('Searching for:', cityName);
-  // Add your logic to fetch weather data here
+searchButton.addEventListener("click", fetchWeatherData);
+
+cityInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault(); 
+    fetchWeatherData(); 
+  }
 });
